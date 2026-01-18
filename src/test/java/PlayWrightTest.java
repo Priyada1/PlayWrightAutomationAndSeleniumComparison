@@ -27,9 +27,13 @@ public class PlayWrightTest {
         // Initialize Playwright
         playwright = Playwright.create();
 
+        // Check if running in CI/CD (headless mode)
+        boolean isHeadless = System.getenv("HEADLESS") != null && 
+                            System.getenv("HEADLESS").equalsIgnoreCase("true");
+
         // Launch Chrome browser
         browser = playwright.chromium().launch(
-            new BrowserType.LaunchOptions().setHeadless(false)
+            new BrowserType.LaunchOptions().setHeadless(isHeadless)
         );
 
         // Create a new page
