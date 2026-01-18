@@ -40,9 +40,6 @@ build/
 ### Allure ###
 .allure/
 
-### Comparison Module (to ignore) ###
-selenium-cypress-playwright-comparison-main/
-
 ### Documentation files (optional - remove if you want to keep them) ###
 # ARCHITECTURE_EXPLANATION.md
 # ASYNC_AWAIT_EXPLANATION.md
