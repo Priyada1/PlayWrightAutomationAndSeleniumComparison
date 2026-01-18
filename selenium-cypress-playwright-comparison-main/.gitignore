@@ -1,0 +1,104 @@
+# Dependencies
+node_modules/
+venv/
+env/
+.env
+
+# Test Results and Reports
+test-results/
+playwright-report/
+cypress/videos/
+cypress/screenshots/
+reports/
+screenshots/
+allure-results/
+allure-report/
+
+# Browser Downloads
+browsers/
+drivers/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime Data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage Directory
+coverage/
+.nyc_output/
+
+# Temporary Files
+tmp/
+temp/
+
+# Build Outputs
+dist/
+build/
+target/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.docstates
