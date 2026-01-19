@@ -12,7 +12,8 @@ pipeline {
     
     environment {
         HEADLESS = 'true'
-        MAVEN_OPTS = '-Xmx1024m -XX:MaxPermSize=256m'
+        // MaxPermSize was removed in Java 8+, using only Xmx for Java 23
+        MAVEN_OPTS = '-Xmx1024m'
         // Add Homebrew bin to PATH for Maven and Node.js
         PATH = "/opt/homebrew/bin:${env.PATH}"
     }
