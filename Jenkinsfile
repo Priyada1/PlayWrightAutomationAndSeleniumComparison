@@ -115,13 +115,10 @@ pipeline {
             steps {
                 echo 'Publishing Allure report...'
                 script {
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'target/allure-results']]
-                    ])
+                    // Archive Allure report as artifact (works without Allure plugin)
+                    // The report is already generated in target/site/allure-maven-plugin/
+                    echo 'Allure report generated at: target/site/allure-maven-plugin/'
+                    echo 'To view the report, install Allure Jenkins Plugin or download the artifact'
                 }
             }
         }
@@ -133,6 +130,8 @@ pipeline {
             // Archive artifacts
             archiveArtifacts artifacts: 'target/surefire-reports/**/*', allowEmptyArchive: true
             archiveArtifacts artifacts: 'target/allure-results/**/*', allowEmptyArchive: true
+            // Archive Allure HTML report (can be downloaded and opened in browser)
+            archiveArtifacts artifacts: 'target/site/allure-maven-plugin/**/*', allowEmptyArchive: true
             
             // Clean workspace (optional)
             // cleanWs()
