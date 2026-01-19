@@ -115,10 +115,14 @@ pipeline {
             steps {
                 echo 'Publishing Allure report...'
                 script {
-                    // Archive Allure report as artifact (works without Allure plugin)
-                    // The report is already generated in target/site/allure-maven-plugin/
-                    echo 'Allure report generated at: target/site/allure-maven-plugin/'
-                    echo 'To view the report, install Allure Jenkins Plugin or download the artifact'
+                    // Publish Allure report to Jenkins UI (requires Allure Jenkins Plugin)
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'target/allure-results']]
+                    ])
                 }
             }
         }
