@@ -13,9 +13,8 @@ pipeline {
     environment {
         HEADLESS = 'true'
         MAVEN_OPTS = '-Xmx1024m -XX:MaxPermSize=256m'
-        // Uncomment and set if Java is not in PATH
-        // JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
-        // PATH = "${JAVA_HOME}/bin:${PATH}"
+        // Add Homebrew bin to PATH for Maven and Node.js
+        PATH = "/opt/homebrew/bin:${env.PATH}"
     }
     
     stages {
@@ -40,7 +39,14 @@ pipeline {
                     java -version || echo "ERROR: Java not found in PATH"
                     echo ""
                     echo "Maven version:"
-                    mvn -version || echo "ERROR: Maven not found in PATH"
+                    if command -v mvn &> /dev/null; then
+                        mvn -version
+                    elif [ -f "/Users/chakrapanipriyadarshi/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven/bin/mvn" ]; then
+                        /Users/chakrapanipriyadarshi/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven/bin/mvn -version
+                        echo "Using Jenkins Maven installation"
+                    else
+                        echo "ERROR: Maven not found in PATH or Jenkins tools"
+                    fi
                     echo ""
                     echo "Node version:"
                     node -v || echo "WARNING: Node.js not found (needed for Playwright browsers)"
@@ -51,7 +57,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building project with Maven...'
-                sh 'mvn clean compile test-compile'
+                script {
+                    def mvnCmd = sh(
+                        script: 'command -v mvn || echo "/Users/chakrapanipriyadarshi/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven/bin/mvn"',
+                        returnStdout: true
+                    ).trim()
+                    sh "${mvnCmd} clean compile test-compile"
+                }
             }
         }
         
@@ -59,7 +71,8 @@ pipeline {
             steps {
                 echo 'Installing Playwright browsers...'
                 sh '''
-                    mvn dependency:resolve || true
+                    MVN_CMD=$(command -v mvn || echo "/Users/chakrapanipriyadarshi/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven/bin/mvn")
+                    $MVN_CMD dependency:resolve || true
                     npx playwright install --with-deps chromium || true
                 '''
             }
@@ -68,7 +81,13 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running Playwright tests...'
-                sh 'mvn test'
+                script {
+                    def mvnCmd = sh(
+                        script: 'command -v mvn || echo "/Users/chakrapanipriyadarshi/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven/bin/mvn"',
+                        returnStdout: true
+                    ).trim()
+                    sh "${mvnCmd} test"
+                }
             }
             post {
                 always {
@@ -81,7 +100,13 @@ pipeline {
         stage('Generate Allure Report') {
             steps {
                 echo 'Generating Allure report...'
-                sh 'mvn allure:report'
+                script {
+                    def mvnCmd = sh(
+                        script: 'command -v mvn || echo "/Users/chakrapanipriyadarshi/.jenkins/tools/hudson.tasks.Maven_MavenInstallation/maven/bin/mvn"',
+                        returnStdout: true
+                    ).trim()
+                    sh "${mvnCmd} allure:report"
+                }
             }
         }
         
