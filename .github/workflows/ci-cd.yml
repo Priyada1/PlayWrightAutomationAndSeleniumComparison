@@ -82,10 +82,13 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: |
-            target/surefire-reports/**/*.xml
+            target/surefire-reports/TEST-*.xml
+            target/surefire-reports/junitreports/TEST-*.xml
           check_name: Test Results
           comment_mode: always
           report_individual_runs: true
+          check_run_annotations: all
+          check_run_annotations_branch: all
 
   publish-report:
     name: Publish Allure Report
