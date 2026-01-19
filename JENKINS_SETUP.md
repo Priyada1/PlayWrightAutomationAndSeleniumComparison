@@ -29,12 +29,12 @@ This guide explains how to set up Jenkins Pipeline from SCM for the Playwright A
 1. Go to **Manage Jenkins** → **Global Tool Configuration**
 
 2. **Configure JDK:**
-   - Name: `JDK17`
+   - Name: `jdk-17` (IMPORTANT: Use this exact name, or update Jenkinsfile)
    - JAVA_HOME: `/path/to/jdk-17` (or select "Install automatically")
    - Version: `17`
 
 3. **Configure Maven:**
-   - Name: `M3`
+   - Name: `maven3` (IMPORTANT: Use this exact name, or update Jenkinsfile)
    - MAVEN_HOME: `/path/to/maven` (or select "Install automatically")
    - Version: `3.9.x` or latest
 
@@ -93,13 +93,19 @@ This guide explains how to set up Jenkins Pipeline from SCM for the Playwright A
 
 ### Change Java Version:
 ```groovy
-jdk 'JDK17'  // Change to 'JDK21' or your configured JDK name
+jdk 'jdk-17'  // Change to 'jdk-21' or your configured JDK name
 ```
 
 ### Change Maven Version:
 ```groovy
-maven 'M3'  // Change to your configured Maven name
+maven 'maven3'  // Change to your configured Maven name
 ```
+
+### Alternative: Use System Tools (No Jenkins Tool Configuration)
+If you don't want to configure tools in Jenkins, use `Jenkinsfile.without-tools`:
+- Rename it to `Jenkinsfile`
+- Ensure Maven and Java are installed on Jenkins agent
+- Set JAVA_HOME in environment if needed
 
 ### Run Specific Tests:
 Edit `testng.xml` or add test groups:

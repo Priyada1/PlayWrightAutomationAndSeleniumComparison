@@ -1,23 +1,20 @@
 pipeline {
     agent any
     
-    // Note: Configure tools in Jenkins: Manage Jenkins -> Global Tool Configuration
-    // Maven: Name it 'maven3' (or change the name below to match your configuration)
-    // JDK: Name it 'jdk-17' (or change the name below to match your configuration)
-    tools {
-        maven 'maven3'  // Change this to match your Maven tool name in Jenkins
-        jdk 'jdk-17'    // Change this to match your JDK tool name in Jenkins
+    // Alternative version: Use system tools instead of Jenkins tool configuration
+    // Use this if you don't want to configure tools in Jenkins Global Tool Configuration
+    
+    environment {
+        HEADLESS = 'true'
+        MAVEN_OPTS = '-Xmx1024m -XX:MaxPermSize=256m'
+        // Set JAVA_HOME if Java is installed but not in PATH
+        // JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
     }
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timeout(time: 30, unit: 'MINUTES')
         timestamps()
-    }
-    
-    environment {
-        HEADLESS = 'true'
-        MAVEN_OPTS = '-Xmx1024m -XX:MaxPermSize=256m'
     }
     
     stages {
@@ -60,9 +57,6 @@ pipeline {
                 always {
                     // Archive test results
                     junit 'target/surefire-reports/TEST-*.xml'
-                    
-                    // Publish test results
-                    publishTestResults testResultsPattern: 'target/surefire-reports/TEST-*.xml'
                 }
             }
         }
@@ -96,25 +90,12 @@ pipeline {
             // Archive artifacts
             archiveArtifacts artifacts: 'target/surefire-reports/**/*', allowEmptyArchive: true
             archiveArtifacts artifacts: 'target/allure-results/**/*', allowEmptyArchive: true
-            
-            // Clean workspace (optional)
-            // cleanWs()
         }
         success {
             echo 'Pipeline succeeded! ✅'
-            emailext(
-                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.\n\nCheck console output at ${env.BUILD_URL}",
-                to: "${env.CHANGE_AUTHOR_EMAIL ?: 'your-email@example.com'}"
-            )
         }
         failure {
             echo 'Pipeline failed! ❌'
-            emailext(
-                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.\n\nCheck console output at ${env.BUILD_URL}",
-                to: "${env.CHANGE_AUTHOR_EMAIL ?: 'your-email@example.com'}"
-            )
         }
         unstable {
             echo 'Pipeline unstable! ⚠️'
