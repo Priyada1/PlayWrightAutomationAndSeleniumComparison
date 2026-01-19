@@ -12,6 +12,12 @@ jobs:
     name: Run Playwright Tests
     runs-on: ubuntu-latest
     
+    # Grant permissions for GITHUB_TOKEN to create check runs and write comments
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    
     strategy:
       matrix:
         java-version: [17]
@@ -95,6 +101,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    # Grant permissions for GITHUB_TOKEN to deploy to GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     
     steps:
       - name: Checkout code
