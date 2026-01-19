@@ -1,13 +1,8 @@
 pipeline {
     agent any
     
-    // Note: Configure tools in Jenkins: Manage Jenkins -> Global Tool Configuration
-    // Maven: Name it 'maven3' (or change the name below to match your configuration)
-    // JDK: Name it 'jdk-17' (or change the name below to match your configuration)
-    tools {
-        maven 'maven3'  // Change this to match your Maven tool name in Jenkins
-        jdk 'jdk-17'    // Change this to match your JDK tool name in Jenkins
-    }
+    // Using system-installed tools (Maven and Java must be in PATH)
+    // Alternative: If you configure tools in Jenkins, uncomment the tools section below
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -18,6 +13,9 @@ pipeline {
     environment {
         HEADLESS = 'true'
         MAVEN_OPTS = '-Xmx1024m -XX:MaxPermSize=256m'
+        // Uncomment and set if Java is not in PATH
+        // JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+        // PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     
     stages {
@@ -31,6 +29,22 @@ pipeline {
                     ).trim()
                     env.BUILD_DISPLAY_NAME = "#${env.BUILD_NUMBER} - ${env.GIT_COMMIT_SHORT}"
                 }
+            }
+        }
+        
+        stage('Verify Tools') {
+            steps {
+                echo 'Verifying required tools are available...'
+                sh '''
+                    echo "Java version:"
+                    java -version || echo "ERROR: Java not found in PATH"
+                    echo ""
+                    echo "Maven version:"
+                    mvn -version || echo "ERROR: Maven not found in PATH"
+                    echo ""
+                    echo "Node version:"
+                    node -v || echo "WARNING: Node.js not found (needed for Playwright browsers)"
+                '''
             }
         }
         
@@ -60,9 +74,6 @@ pipeline {
                 always {
                     // Archive test results
                     junit 'target/surefire-reports/TEST-*.xml'
-                    
-                    // Publish test results
-                    publishTestResults testResultsPattern: 'target/surefire-reports/TEST-*.xml'
                 }
             }
         }
