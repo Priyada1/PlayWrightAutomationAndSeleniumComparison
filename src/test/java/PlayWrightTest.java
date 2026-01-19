@@ -28,7 +28,7 @@ public class PlayWrightTest {
         playwright = Playwright.create();
 
         // Check if running in CI/CD (headless mode)
-        boolean isHeadless = System.getenv("HEADLESS") != null && 
+        boolean isHeadless = System.getenv("HEADLESS") != null &&
                             System.getenv("HEADLESS").equalsIgnoreCase("true");
 
         // Launch Chrome browser
@@ -49,12 +49,12 @@ public class PlayWrightTest {
     public void testGoogleTitle() {
         // Using Page Object Model
         GooglePage googlePage = new GooglePage(page);
-        
+
         // Navigate to Google and get title
         Allure.step("Navigate to Google homepage", () -> {
             googlePage.navigate();
         });
-        
+
         String actualTitle = Allure.step("Get page title", () -> {
             return googlePage.getPageTitle();
         });
@@ -77,8 +77,9 @@ public class PlayWrightTest {
     @Severity(SeverityLevel.BLOCKER)
     public void testAddMobileToCart() {
         // Using Page Object Model
+        System.out.println("mobile cart testcases started ");
         ConfigReaderUtils config = ConfigReaderUtils.getInstance();
-        
+
         // Step 1: Navigate to Amazon homepage
         Allure.step("Navigate to Amazon homepage", () -> {
             AmazonHomePage amazonHomePage = new AmazonHomePage(page);
@@ -87,7 +88,7 @@ public class PlayWrightTest {
 
         // Step 2: Search for "motorola" (getting search query from config)
         AmazonSearchResultsPage searchResultsPage = Allure.step(
-            "Search for product: " + config.getMotorolaSearchQuery(), 
+            "Search for product: " + config.getMotorolaSearchQuery(),
             () -> {
                 AmazonHomePage amazonHomePage = new AmazonHomePage(page);
                 return amazonHomePage.search(config.getMotorolaSearchQuery());
