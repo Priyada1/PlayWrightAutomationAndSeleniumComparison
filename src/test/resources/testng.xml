@@ -4,7 +4,10 @@
     <listeners>
         <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
-    
+    <listeners>
+        <listener class-name="org.example.listeners.ExtentReportListeners" />
+    </listeners>
+
     <test name="Playwright Tests">
         <classes>
             <class name="PlayWrightTest">
@@ -16,4 +19,3 @@
         </classes>
     </test>
 </suite>
-
