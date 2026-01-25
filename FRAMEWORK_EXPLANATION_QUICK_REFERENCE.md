@@ -6,6 +6,18 @@
 
 ---
 
+## 🕒 2–3 Minute Answer (Full Script)
+
+"I designed a **hybrid automation framework** using **Java 17, Playwright, and TestNG**, combining **Page Object Model**, **data-driven testing**, and **layered architecture**. At a high level, the code is structured into **BasePage**, **Page Objects**, **Utils**, **Tests**, and **Listeners**. The **BasePage** contains common actions like navigation and waits, and each page class extends it so tests stay clean and maintainable. All configuration and test data are externalized through **config.properties** and **Excel files** using **Apache POI**, so we can change data without touching the code.
+
+For execution, **TestNG** handles lifecycle annotations and allows parallel runs. Our build is managed through **Maven**, and we integrate **Allure** and **Extent Reports** for detailed HTML reporting—Allure captures step-by-step execution with annotations like Epic, Feature, and Story, while Extent provides a secondary report format for stakeholders.
+
+The framework is fully integrated with **Jenkins CI/CD**. The pipeline checks out code, verifies tools, builds the project, installs Playwright browsers, runs tests in **headless mode**, and then publishes Allure reports inside Jenkins. We also archive test artifacts and send notifications. In terms of design patterns, we use **POM**, **Singleton** for configuration management, **inheritance** for code reuse, and a **fluent interface** for readable test flow.
+
+We’ve addressed common challenges like flaky tests by relying on Playwright’s auto-waiting and explicit waits in the BasePage. The result is a framework that is **stable, scalable, and easy to extend**—adding a new page only requires creating a new page object and a test, without impacting existing code."
+
+---
+
 ## 📋 Quick Answer Structure (2-3 Minutes)
 
 ### 1. Framework Type (10 seconds)
